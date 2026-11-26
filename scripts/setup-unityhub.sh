@@ -6,7 +6,8 @@ sudo apt-get update -y
 sudo apt-get install -y --no-install-recommends \
   wget ca-certificates unzip xz-utils dbus-x11 xdotool x11-utils \
   libnss3 libgbm1 libasound2t64 libxss1 libgtk-3-0 libatk-bridge2.0-0 \
-  libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libpango-1.0-0 libcups2 || true
+  libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libpango-1.0-0 libcups2 \
+  epiphany-browser || true
 
 mkdir -p "$HOME/unityhub"
 cd "$HOME/unityhub"
