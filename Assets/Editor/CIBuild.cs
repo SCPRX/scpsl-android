@@ -22,6 +22,7 @@ public class CIBuild
         PlayerSettings.companyName = "SCPRX";
         PlayerSettings.productName = "SCPSL Android";
         PlayerSettings.bundleVersion = "0.1.0";
+        PlayerSettings.Android.bundleVersionCode = 1;
         PlayerSettings.SplashScreen.show = false;
 
         Directory.CreateDirectory("Assets/Scenes");
