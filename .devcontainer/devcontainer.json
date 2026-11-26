@@ -1,0 +1,18 @@
+{
+  "name": "SCPSL Android - Unity License Desktop",
+  "image": "mcr.microsoft.com/devcontainers/universal:5",
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {
+      "password": "vscode",
+      "webPort": "6080",
+      "vncPort": "5901"
+    }
+  },
+  "forwardPorts": [6080, 5901],
+  "portsAttributes": {
+    "6080": { "label": "Cloud Desktop (noVNC)", "onAutoForward": "openBrowser" },
+    "5901": { "label": "VNC" }
+  },
+  "postCreateCommand": "bash scripts/setup-unityhub.sh || true",
+  "hostRequirements": { "cpus": 2, "memory": "8gb" }
+}
