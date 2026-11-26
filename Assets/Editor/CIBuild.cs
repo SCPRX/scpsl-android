@@ -16,6 +16,9 @@ public class CIBuild
         PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
         PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel23;
         PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevelAuto;
+        Debug.Log("[CI] backend=" + PlayerSettings.GetScriptingBackend(NamedBuildTarget.Android)
+            + " arch=" + PlayerSettings.Android.targetArchitectures
+            + " target=" + EditorUserBuildSettings.activeBuildTarget);
         PlayerSettings.companyName = "SCPRX";
         PlayerSettings.productName = "SCPSL Android";
         PlayerSettings.bundleVersion = "0.1.0";
@@ -46,7 +49,19 @@ public class CIBuild
             target = BuildTarget.Android,
             options = BuildOptions.None
         };
-        var report = BuildPipeline.BuildPlayer(options);
+        Debug.Log("[CI] build backend=" + PlayerSettings.GetScriptingBackend(NamedBuildTarget.Android)
+            + " arch=" + PlayerSettings.Android.targetArchitectures);
+        UnityEditor.Build.Reporting.BuildReport report;
+        try
+        {
+            report = BuildPipeline.BuildPlayer(options);
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("BUILD EXCEPTION: " + e);
+            EditorApplication.Exit(1);
+            return;
+        }
         Debug.Log("BUILD RESULT: " + report.summary.result + " size=" + report.summary.totalSize);
         if (report.summary.result != UnityEditor.Build.Reporting.BuildResult.Succeeded)
         {
