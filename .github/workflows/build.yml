@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APK (Unity 6)
 
 on:
   workflow_dispatch:
@@ -7,37 +7,36 @@ on:
 
 jobs:
   build:
-    name: Unity 2019.4.16f1 Android
+    name: Unity 6000.0.85f2 Android
     runs-on: ubuntu-latest
+    container:
+      image: unityci/editor:ubuntu-6000.0.85f2-android-3
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          lfs: true
 
-      - name: Cache Library
-        uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-2019.4.16f1-android
-          restore-keys: |
-            Library-2019.4.16f1
-            Library-
+      - name: Install Unity license (entitlement)
+        shell: bash
+        run: |
+          set -e
+          HOME_DIR="${HOME:-/root}"
+          mkdir -p "$HOME_DIR/.config/unity3d/Unity/licenses"
+          echo "${{ secrets.UNITY_ENTITLEMENT }}" | base64 -d > "$HOME_DIR/.config/unity3d/Unity/licenses/UnityEntitlementLicense.xml"
+          ls -la "$HOME_DIR/.config/unity3d/Unity/licenses/"
 
       - name: Build APK
-        uses: game-ci/unity-builder@v4
-        env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-        with:
-          unityVersion: 2019.4.16f1
-          targetPlatform: Android
-          buildMethod: CIBuild.BuildAndroid
-          androidExportType: androidPackage
+        shell: bash
+        run: |
+          set -e
+          xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' \
+            /opt/unity/Editor/Unity -batchmode -nographics -quit \
+            -projectPath "$GITHUB_WORKSPACE" \
+            -executeMethod CIBuild.BuildAndroid \
+            -logFile -
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Smoke-APK
+          name: smoke-apk
           path: build/Android/*.apk
+          if-no-files-found: error
