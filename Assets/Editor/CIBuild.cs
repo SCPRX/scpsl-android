@@ -10,7 +10,8 @@ public class CIBuild
     {
         // 目标平台/架构设置（Unity 6 必须显式指定，否则报 Target architecture not specified）
         EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
-        PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
+        // 2 核构建机用 Mono 后端：免 IL2CPP C++ 编译（IL2CPP 在这个项目要跑 2-3 小时）
+        PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.Mono2x);
         PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.scprx.scpsl");
         PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
         PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel23;
