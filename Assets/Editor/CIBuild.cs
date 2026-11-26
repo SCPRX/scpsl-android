@@ -13,7 +13,7 @@ public class CIBuild
         // 2 核构建机用 Mono 后端：免 IL2CPP C++ 编译（IL2CPP 在这个项目要跑 2-3 小时）
         PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.Mono2x);
         PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.scprx.scpsl");
-        PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+        PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARMv7;
         PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel23;
         PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevelAuto;
         Debug.Log("[CI] backend=" + PlayerSettings.GetScriptingBackend(NamedBuildTarget.Android)
