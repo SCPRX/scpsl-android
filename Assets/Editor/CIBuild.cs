@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -7,6 +8,18 @@ public class CIBuild
 {
     public static void BuildAndroid()
     {
+        // 目标平台/架构设置（Unity 6 必须显式指定，否则报 Target architecture not specified）
+        EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
+        PlayerSettings.SetScriptingBackend(NamedBuildTarget.Android, ScriptingImplementation.IL2CPP);
+        PlayerSettings.SetApplicationIdentifier(NamedBuildTarget.Android, "com.scprx.scpsl");
+        PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64;
+        PlayerSettings.Android.minSdkVersion = AndroidSdkVersions.AndroidApiLevel23;
+        PlayerSettings.Android.targetSdkVersion = AndroidSdkVersions.AndroidApiLevelAuto;
+        PlayerSettings.companyName = "SCPRX";
+        PlayerSettings.productName = "SCPSL Android";
+        PlayerSettings.bundleVersion = "0.1.0";
+        PlayerSettings.SplashScreen.show = false;
+
         Directory.CreateDirectory("Assets/Scenes");
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         var camGo = new GameObject("Main Camera");
@@ -23,6 +36,7 @@ public class CIBuild
         cube.transform.position = new Vector3(0f, 1f, 0f);
         EditorSceneManager.SaveScene(scene, "Assets/Scenes/Smoke.unity");
         EditorBuildSettings.scenes = new[] { new EditorBuildSettingsScene("Assets/Scenes/Smoke.unity", true) };
+
         Directory.CreateDirectory("build/Android");
         var options = new BuildPlayerOptions
         {
